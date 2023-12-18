@@ -1,0 +1,193 @@
+public class UsaABB{
+    
+    public static void main(String[] args){
+        ABB arbol = new ABB();
+
+        Nodo raizArbolABB = arbol.regresaRaiz();
+        
+        //25, 8, 29, 38, 27
+        arbol.insertarValor(25);
+        arbol.insertarValor(8);
+        arbol.insertarValor(29);
+        arbol.insertarValor(38);
+        arbol.insertarValor(27);
+        System.out.println("\n");
+
+        System.out.println("Nodo raiz: " + arbol.regresaRaiz().dato);
+        System.out.println("\n");
+        
+        System.out.println("Arbol acostado:");
+        arbol.muestraAcostado(0, arbol.regresaRaiz());
+        System.out.println("\n");
+        
+        /*
+        System.out.println("Buscar un nodo en el arbol:");
+        arbol.arbolBusqueda(8, arbol.regresaRaiz());
+        System.out.println("\n");
+        */
+        
+        System.out.println("Arbol imprimido en Pre-Orden:");
+        arbol.preOrden(arbol.regresaRaiz());
+        System.out.println("\n");
+        
+        System.out.println("Arbol imprimido en In-Orden:");
+        arbol.inOrden(arbol.regresaRaiz());
+        System.out.println("\n");
+        
+        System.out.println("Arbol imprimido en Post-Orden:");
+        arbol.postOrden(arbol.regresaRaiz());
+        System.out.println("\n");
+        
+        /*
+        System.out.println("Eliminar un nodo del arbol");
+        arbol.eliminarNodo(8, arbol.regresaRaiz());
+        arbol.muestraAcostado(0, arbol.regresaRaiz());
+        */
+    }
+}
+
+import javax.swing.Box;
+
+public class ABB{           //Java Beans
+    private Nodo raiz;  //null
+    Nodo nodoRef;
+    ABB(){
+        this.raiz = null;
+    } 
+
+    public boolean esVacio(){
+        return (this.raiz == null); 
+    }
+
+    public Nodo regresaRaiz(){   //getRaiz  -- getter de atributo raiz
+        return this.raiz;
+    }
+
+    public void insertarValor(int valor){
+        if (this.raiz == null){
+            System.out.println("Insertando raiz: " + valor);
+            this.raiz = new Nodo();
+            this.raiz.dato = valor;
+            this.raiz.izquierdo = null;
+            this.raiz.derecho = null;
+        }
+        
+        else insertarNodo(valor, this.raiz);
+    }
+
+    public void insertarNodo(int valor, Nodo nodoRef){
+            if (valor <= nodoRef.dato) {
+                if (nodoRef.izquierdo == null){
+                    System.out.println("Insertando hijo izquierdo de: "  + nodoRef.dato + ": " + valor);
+                    nodoRef.izquierdo =  new Nodo();
+                    nodoRef.izquierdo.dato = valor;
+                    nodoRef.izquierdo.izquierdo = null;
+                    nodoRef.izquierdo.derecho = null;
+                }
+                
+                else {
+                    insertarNodo(valor, nodoRef.izquierdo);
+                }
+            }
+            
+            else {
+                if (valor > nodoRef.dato) {
+                    if (nodoRef.derecho == null){
+                        System.out.println("Insertando hijo derecho de: " + nodoRef.dato + ": " + valor);
+                        nodoRef.derecho =  new Nodo();
+                        nodoRef.derecho.dato = valor;
+                        nodoRef.derecho.izquierdo = null;
+                        nodoRef.derecho.derecho = null;
+                    }
+                    
+                    else {
+                        insertarNodo(valor, nodoRef.derecho);
+                    }
+                }
+            }
+    }
+
+    public void muestraAcostado(int nivel, Nodo nodoRef){
+        if (nodoRef == null){
+            return;
+        }
+        
+        else {
+            muestraAcostado(nivel + 1, nodoRef.derecho);
+            for (int i=0; i < nivel; i++){
+                System.out.print("   ");
+            }
+
+            System.out.println(nodoRef.dato);
+            muestraAcostado(nivel + 1, nodoRef.izquierdo);
+        }
+    }
+    
+    /*
+    public boolean existe(int busqueda) {
+    return existe(this.raiz, busqueda);
+    }
+
+    private boolean buscarNodo(Nodo nodoRef, int busqueda) {
+         if (nodoRef == null) {
+             return false;
+         }
+         
+         if (nodoRef == busqueda) {
+             return true;
+         } else if (busqueda < n.getDato()) {
+                    return existe(n.getIzquierda(), busqueda);
+                } else {
+                        return existe(n.getDerecha(), busqueda);
+                }
+    }
+    */
+    
+    public void preOrden(Nodo nodoRef) {
+        if (nodoRef == null) {
+            return;
+        }
+        
+        else {
+            System.out.print("[" + nodoRef.dato + "]" + " -> ");
+            preOrden(nodoRef.izquierdo);
+            preOrden(nodoRef.derecho);
+        }
+    }
+    
+    public void inOrden(Nodo nodoRef) {
+        if (nodoRef == null) {
+            return;
+        }
+        
+        else {
+            inOrden(nodoRef.izquierdo);
+            System.out.print("[" + nodoRef.dato + "]" + " -> ");
+            inOrden(nodoRef.derecho);
+        }
+    }
+    
+    public void postOrden(Nodo nodoRef) {
+       if (nodoRef == null) {
+            return;
+       } 
+       
+       else {
+           postOrden(nodoRef.izquierdo);
+           postOrden(nodoRef.derecho);
+           System.out.print("[" + nodoRef.dato + "]" + " -> ");
+       }
+    }
+    
+    /*
+    public boolean eliminarNodo(int valor) {
+        if (nodoRef == null) {
+            return;
+       } 
+       
+       else {
+           nodoRef = null;
+       }
+    }
+    */
+}
